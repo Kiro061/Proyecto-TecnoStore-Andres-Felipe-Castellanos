@@ -14,13 +14,6 @@ public class FactoryCelular {
             String sistemaOperativo,
             CategoriaGama gama) {
 
-        return new Celular(
-                id,
-                marca,
-                modelo,
-                precio,
-                stock,
-                sistemaOperativo,
-                gama);
+        return new Celular(id,marca,modelo,precio,stock,sistemaOperativo,gama);
     }
 }
