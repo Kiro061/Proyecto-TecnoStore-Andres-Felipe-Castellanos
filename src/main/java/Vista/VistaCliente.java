@@ -1,10 +1,12 @@
 
 package Vista;
 
+import Utilidades.Validador;
+
 
 public class VistaCliente {
     public void MenuClientes() {
-        Validaciones v= new Validaciones();
+        Validador v= new Validador();
         int op;
         do {
             op = v.validarEnteroRango("""

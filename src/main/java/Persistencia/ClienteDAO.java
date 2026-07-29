@@ -12,9 +12,9 @@ public class ClienteDAO {
 
     private ConexionDB conexion = new ConexionDB();
 
-    public boolean registrarClientes(Cliente cliente) {
-        String sql = "INSERT INTO clientes"
-                + "nombre,identificacion,correo,telefono"
+    public boolean registrarCliente(Cliente cliente) {
+        String sql = " INSERT INTO clientes "
+                + "(nombre, identificacion, correo, telefono)"
                 + "VALUES (?,?,?,?)";
 
         try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {
@@ -33,8 +33,8 @@ public class ClienteDAO {
         return false;
     }
 
-    public boolean eliminarClientes(int id) {
-        String sql = "DELETE FROM clientes WHERE identificacion = ?";
+    public boolean eliminarCliente(int id) {
+        String sql = "DELETE FROM clientes WHERE id = ?";
 
         try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {
             ps.setInt(1, id);
@@ -46,13 +46,13 @@ public class ClienteDAO {
         return false;
     }
 
-    public boolean actualizarClientes(Cliente cliente) {
-        String sql = "UPDATE clientes SET"
-                + "nombre"
-                + "identificacion"
-                + "correo"
-                + "telefono"
-                + "WHERE id=?";
+    public boolean actualizarCliente(Cliente cliente) {
+        String sql = "UPDATE clientes SET "
+                + "nombre = ?, "
+                + "identificacion = ?, "
+                + "correo = ?, "
+                + "telefono = ? "
+                + "WHERE id = ?";
 
         try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {
             ps.setString(1, cliente.getNombre());
@@ -70,7 +70,7 @@ public class ClienteDAO {
         return false;
     }
 
-    public List<Cliente> listarClientes() {
+    public List<Cliente> listarCliente() {
         String sql = "SELECT * FROM clientes";
         List<Cliente> clientes = new ArrayList<>();
         try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {
@@ -92,7 +92,7 @@ public class ClienteDAO {
         return clientes;
     }
 
-    public Cliente buscarPorIdClientes(int id) {
+    public Cliente buscarPorIdCliente(int id) {
         String sql = "SELECT * FROM clientes WHERE id = ?";
 
         try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {
@@ -108,6 +108,30 @@ public class ClienteDAO {
                 );
 
                 return cliente;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public Cliente buscarPorIdentificacion(String identificacion) {
+        String sql = "SELECT * FROM clientes WHERE identificacion = ?";
+
+        try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, identificacion);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Cliente cliente = new Cliente(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("identificacion"),
+                            rs.getString("correo"),
+                            rs.getString("telefono")
+                    );
+                    return cliente;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

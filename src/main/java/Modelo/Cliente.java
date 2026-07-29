@@ -1,20 +1,26 @@
-
 package Modelo;
 
-
 public class Cliente {
+
     private int id;
     private String nombre;
     private String identificacion;
     private String correo;
     private String telefono;
 
+    public Cliente(String nombre, String identificacion, String correo, String telefono) {
+        setNombre(nombre);
+        setIdentificacion(identificacion);
+        setCorreo(correo);
+        setTelefono(telefono);
+    }
+
     public Cliente(int id, String nombre, String identificacion, String correo, String telefono) {
-        this.id = id;
-        this.nombre = nombre;
-        this.identificacion = identificacion;
-        this.correo = correo;
-        this.telefono = telefono;
+        setId(id);
+        setNombre(nombre);
+        setIdentificacion(identificacion);
+        setCorreo(correo);
+        setTelefono(telefono);
     }
 
     public int getId() {
@@ -22,7 +28,11 @@ public class Cliente {
     }
 
     public void setId(int id) {
-        this.id = id;
+        if (id > 0) {
+            this.id = id;
+        } else {
+            System.out.println("Error: el ID debe ser mayor que cero.");
+        }
     }
 
     public String getNombre() {
@@ -30,15 +40,24 @@ public class Cliente {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        if (nombre != null && !nombre.isBlank()) {
+            this.nombre = nombre;
+        } else {
+            System.out.println("Error: el nombre no puede estar vacío.");
+        }
     }
 
     public String getIdentificacion() {
         return identificacion;
     }
 
+
     public void setIdentificacion(String identificacion) {
-        this.identificacion = identificacion;
+        if (identificacion != null && !identificacion.isBlank()) {
+            this.identificacion = identificacion;
+        } else {
+            System.out.println("Error: la identificación no puede estar vacía.");
+        }
     }
 
     public String getCorreo() {
@@ -46,7 +65,11 @@ public class Cliente {
     }
 
     public void setCorreo(String correo) {
-        this.correo = correo;
+        if (correo != null && !correo.isBlank() && correo.contains("@")) {
+            this.correo = correo;
+        } else {
+            System.out.println("Error: el correo no es válido.");
+        }
     }
 
     public String getTelefono() {
@@ -54,19 +77,22 @@ public class Cliente {
     }
 
     public void setTelefono(String telefono) {
-        this.telefono = telefono;
+        if (telefono != null && !telefono.isBlank()) {
+            this.telefono = telefono;
+        } else {
+            System.out.println("Error: el teléfono no puede estar vacío.");
+        }
     }
 
     @Override
     public String toString() {
         return ("""
-                ID:                 %s
+                ID:                 %d
                 NOMBRE:             %s
                 IDENTIFICACION:     %s
                 CORREO:             %s
                 TELEFONO:           %s
-                """.formatted(id,nombre,identificacion,correo,telefono));
+                """.formatted(id, nombre, identificacion, correo, telefono));
     }
-    
-    
+
 }

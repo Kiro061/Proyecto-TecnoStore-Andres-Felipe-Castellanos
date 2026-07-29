@@ -1,20 +1,26 @@
-
 package Modelo;
 
-
 public class DetalleVenta {
+
     private int id;
     private Venta venta;
     private Celular celular;
     private int cantidad;
     private double subtotal;
 
+    public DetalleVenta(Venta venta, Celular celular, int cantidad, double subtotal) {
+        setVenta(venta);
+        setCelular(celular);
+        setCantidad(cantidad);
+        setSubtotal(subtotal);
+    }
+
     public DetalleVenta(int id, Venta venta, Celular celular, int cantidad, double subtotal) {
-        this.id = id;
-        this.venta = venta;
-        this.celular = celular;
-        this.cantidad = cantidad;
-        this.subtotal = subtotal;
+        setId(id);
+        setVenta(venta);
+        setCelular(celular);
+        setCantidad(cantidad);
+        setSubtotal(subtotal);
     }
 
     public int getId() {
@@ -22,7 +28,11 @@ public class DetalleVenta {
     }
 
     public void setId(int id) {
-        this.id = id;
+        if (id > 0) {
+            this.id = id;
+        } else {
+            System.out.println("Error: el ID debe ser mayor que cero.");
+        }
     }
 
     public Venta getVenta() {
@@ -30,7 +40,11 @@ public class DetalleVenta {
     }
 
     public void setVenta(Venta venta) {
-        this.venta = venta;
+        if (venta != null) {
+            this.venta = venta;
+        } else {
+            System.out.println("Error: la venta no puede ser nula.");
+        }
     }
 
     public Celular getCelular() {
@@ -38,7 +52,11 @@ public class DetalleVenta {
     }
 
     public void setCelular(Celular celular) {
-        this.celular = celular;
+        if (celular != null) {
+            this.celular = celular;
+        } else {
+            System.out.println("Error: el celular no puede ser nulo.");
+        }
     }
 
     public int getCantidad() {
@@ -46,7 +64,11 @@ public class DetalleVenta {
     }
 
     public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+        if (cantidad > 0) {
+            this.cantidad = cantidad;
+        } else {
+            System.out.println("Error: la cantidad debe ser mayor que cero.");
+        }
     }
 
     public double getSubtotal() {
@@ -54,7 +76,11 @@ public class DetalleVenta {
     }
 
     public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
+        if (subtotal >= 0) {
+            this.subtotal = subtotal;
+        } else {
+            System.out.println("Error: el subtotal no puede ser negativo.");
+        }
     }
 
     @Override
@@ -64,11 +90,8 @@ public class DetalleVenta {
                 ID VENTA:   %s
                 ID CELULAR: %s
                 CANTIDAD:   %s
-                SUBTOTAL:   %s
-                """.formatted(id,venta,celular,cantidad,subtotal));
+                SUBTOTAL:   %.2f
+                """.formatted(id, venta.getId(), celular.getId(), cantidad, subtotal));
     }
-    
-    
-            
-            
+
 }
