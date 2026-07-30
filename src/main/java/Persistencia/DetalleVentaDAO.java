@@ -1,11 +1,18 @@
 package Persistencia;
 
 import Modelo.DetalleVenta;
+import Modelo.Venta;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.ResultSet;
 
 public class DetalleVentaDAO {
+
+    private ConexionDB conexion = new ConexionDB();
+    private CelularDAO celularDAO = new CelularDAO();
 
     public boolean registrarDetalle(DetalleVenta detalle, Connection con) {
 
@@ -30,5 +37,39 @@ public class DetalleVentaDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public List<DetalleVenta> listarPorVenta(Venta venta) {
+
+        List<DetalleVenta> detalles = new ArrayList<>();
+
+        String sql = "SELECT * FROM detalle_ventas WHERE id_venta = ?";
+
+        try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, venta.getId());
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+
+                    DetalleVenta detalle = new DetalleVenta(
+                            rs.getInt("id"),
+                            venta,
+                            celularDAO.buscarPorId(rs.getInt("id_celular")),
+                            rs.getInt("cantidad"),
+                            rs.getDouble("subtotal")
+                    );
+
+                    detalles.add(detalle);
+                }
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return detalles;
     }
 }

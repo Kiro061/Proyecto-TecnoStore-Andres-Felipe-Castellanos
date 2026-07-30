@@ -12,7 +12,7 @@ public class ClienteDAO {
 
     private ConexionDB conexion = new ConexionDB();
 
-    public boolean registrarCliente(Cliente cliente) {
+    public boolean registrar(Cliente cliente) {
         String sql = " INSERT INTO clientes "
                 + "(nombre, identificacion, correo, telefono)"
                 + "VALUES (?,?,?,?)";
@@ -33,7 +33,7 @@ public class ClienteDAO {
         return false;
     }
 
-    public boolean eliminarCliente(int id) {
+    public boolean eliminar(int id) {
         String sql = "DELETE FROM clientes WHERE id = ?";
 
         try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {
@@ -46,7 +46,7 @@ public class ClienteDAO {
         return false;
     }
 
-    public boolean actualizarCliente(Cliente cliente) {
+    public boolean actualizar(Cliente cliente) {
         String sql = "UPDATE clientes SET "
                 + "nombre = ?, "
                 + "identificacion = ?, "
@@ -70,7 +70,7 @@ public class ClienteDAO {
         return false;
     }
 
-    public List<Cliente> listarCliente() {
+    public List<Cliente> listar() {
         String sql = "SELECT * FROM clientes";
         List<Cliente> clientes = new ArrayList<>();
         try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {
@@ -92,7 +92,7 @@ public class ClienteDAO {
         return clientes;
     }
 
-    public Cliente buscarPorIdCliente(int id) {
+    public Cliente buscarPorId(int id) {
         String sql = "SELECT * FROM clientes WHERE id = ?";
 
         try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {

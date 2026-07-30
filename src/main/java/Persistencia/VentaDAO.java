@@ -1,5 +1,8 @@
 package Persistencia;
 
+import Modelo.Cliente;
+import java.util.ArrayList;
+import java.util.List;
 import Modelo.DetalleVenta;
 import Modelo.Venta;
 import java.sql.Connection;
@@ -14,8 +17,9 @@ public class VentaDAO {
     private ConexionDB conexion = new ConexionDB();
     private DetalleVentaDAO detalleDAO = new DetalleVentaDAO();
     private CelularDAO celularDAO = new CelularDAO();
+    private ClienteDAO clienteDAO = new ClienteDAO();
 
-    public boolean registrarVenta(Venta venta) {
+    public boolean registrar(Venta venta) {
 
         String sql = """
                 INSERT INTO ventas
@@ -109,4 +113,33 @@ public class VentaDAO {
 
     }
 
+    public List<Venta> listar() {
+
+        List<Venta> ventas = new ArrayList<>();
+
+        String sql = "SELECT * FROM ventas";
+
+        try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                Cliente cliente = clienteDAO.buscarPorId(rs.getInt("id_cliente"));
+
+                Venta venta = new Venta(
+                        rs.getInt("id"),
+                        cliente,
+                        rs.getDate("fecha").toLocalDate(),
+                        rs.getDouble("total")
+                );
+
+                venta.setDetalles(detalleDAO.listarPorVenta(venta));
+
+                ventas.add(venta);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ventas;
+    }
 }

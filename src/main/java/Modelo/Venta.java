@@ -26,6 +26,10 @@ public class Venta {
         this.detalles = new ArrayList<>();
     }
 
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
     public void agregarDetalle(DetalleVenta detalle) {
         detalles.add(detalle);
     }
@@ -39,6 +43,10 @@ public class Venta {
         }
 
         return total;
+    }
+
+    public void setDetalles(List<DetalleVenta> detalles) {
+        this.detalles = detalles;
     }
 
     public List<DetalleVenta> getDetalles() {

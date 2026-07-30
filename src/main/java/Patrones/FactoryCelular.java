@@ -4,7 +4,10 @@ import Modelo.CategoriaGama;
 import Modelo.Celular;
 
 public class FactoryCelular {
-
+    
+    private FactoryCelular(){     
+    }
+    
     public static Celular crearCelular(
             int id,
             String marca,
