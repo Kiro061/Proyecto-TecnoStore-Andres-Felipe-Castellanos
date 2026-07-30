@@ -1,35 +1,68 @@
-
 package Vista;
-import Utilidades.Validador;
+
+import Utilidades.ArchivoUtils;
+import Utilidades.ReporteUtils;
+import java.util.Scanner;
 
 public class MenuPrincipal {
-    
-    public void Menu() {
-        Validador v= new Validador();
-        int op;
+
+    private final Scanner sc = new Scanner(System.in);
+
+    private final VistaCelular vistaCelular = new VistaCelular();
+    private final VistaCliente vistaCliente = new VistaCliente();
+    private final VistaVenta vistaVenta = new VistaVenta();
+    private final VistaReportes vistaReportes = new VistaReportes();
+
+    private final ReporteUtils reporte = new ReporteUtils();
+    private final ArchivoUtils archivo = new ArchivoUtils();
+
+    public void iniciar() {
+
+        int opcion;
+
         do {
-            op = v.validarEnteroRango("""
-                                      Bienvenido a TecnoStore
-                                      Digite la opcion a escoger:
-                                      1.Gestion Celulares
-                                      2.Gestion Clientes
-                                      3.Gestion Ventas
-                                      4.Reportes y Estadisticas
-                                      5.Salir
-                                      """,1,5);
-            switch (op){
-                case 1:
+
+            System.out.println("""
                     
-                case 2:
-                    
-                case 3:
-                    
-                case 4:
-                    
-                case 5:
-                    System.out.println("Gracias por usar nuestra aplicacion.");
-                    break;
+                    =================================
+                            TECNOSTORE
+                    =================================
+                    1. Gestión de Celulares
+                    2. Gestión de Clientes
+                    3. Gestión de Ventas
+                    4. Reportes
+                    5. Generar reporte de ventas (.txt)
+                    0. Salir
+                    """);
+
+            System.out.print("Seleccione una opción: ");
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+
+                case 1 ->
+                    vistaCelular.mostrarMenu();
+
+                case 2 ->
+                    vistaCliente.mostrarMenu();
+
+                case 3 ->
+                    vistaVenta.mostrarMenu();
+
+                case 4 ->
+                    vistaReportes.mostrarMenu();
+
+                case 5 ->
+                    archivo.generarReporteVentas();
+
+                case 0 ->
+                    System.out.println("Gracias por usar TecnoStore.");
+
+                default ->
+                    System.out.println("Opción no válida.");
             }
-        } while (op != 5);
+
+        } while (opcion != 0);
+
     }
 }
