@@ -18,28 +18,12 @@ public class GestorCelulares {
             return false;
         }
 
-        if (celular.getPrecio() <= 0) {
-            return false;
-        }
-
-        if (celular.getStock() < 0) {
-            return false;
-        }
-
         return celularDAO.registrar(celular);
     }
 
     public boolean actualizarCelular(Celular celular) {
 
         if (celular == null) {
-            return false;
-        }
-
-        if (celular.getPrecio() <= 0) {
-            return false;
-        }
-
-        if (celular.getStock() < 0) {
             return false;
         }
 
@@ -50,7 +34,7 @@ public class GestorCelulares {
         return celularDAO.eliminar(id);
     }
 
-    public Celular buscarCelular(int id) {
+    public Celular buscarPorId(int id) {
         return celularDAO.buscarPorId(id);
     }
 

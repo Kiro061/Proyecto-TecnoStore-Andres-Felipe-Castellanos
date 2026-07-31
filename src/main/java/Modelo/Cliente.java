@@ -28,11 +28,10 @@ public class Cliente {
     }
 
     public void setId(int id) {
-        if (id > 0) {
-            this.id = id;
-        } else {
-            System.out.println("Error: el ID debe ser mayor que cero.");
+        if (id <= 0) {
+            throw new IllegalArgumentException("El ID debe ser mayor que cero.");
         }
+        this.id = id;
     }
 
     public String getNombre() {
@@ -40,24 +39,21 @@ public class Cliente {
     }
 
     public void setNombre(String nombre) {
-        if (nombre != null && !nombre.isBlank()) {
-            this.nombre = nombre;
-        } else {
-            System.out.println("Error: el nombre no puede estar vacío.");
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
         }
+        this.nombre = nombre;
     }
 
     public String getIdentificacion() {
         return identificacion;
     }
 
-
     public void setIdentificacion(String identificacion) {
-        if (identificacion != null && !identificacion.isBlank()) {
-            this.identificacion = identificacion;
-        } else {
-            System.out.println("Error: la identificación no puede estar vacía.");
+        if (identificacion == null || identificacion.isBlank()) {
+            throw new IllegalArgumentException("La identificación no puede estar vacía.");
         }
+        this.identificacion = identificacion;
     }
 
     public String getCorreo() {
@@ -65,11 +61,10 @@ public class Cliente {
     }
 
     public void setCorreo(String correo) {
-        if (correo != null && !correo.isBlank() && correo.contains("@")) {
-            this.correo = correo;
-        } else {
-            System.out.println("Error: el correo no es válido.");
+        if (correo == null || correo.isBlank() || !correo.contains("@")) {
+            throw new IllegalArgumentException("El correo no es válido.");
         }
+        this.correo = correo;
     }
 
     public String getTelefono() {
@@ -77,11 +72,10 @@ public class Cliente {
     }
 
     public void setTelefono(String telefono) {
-        if (telefono != null && !telefono.isBlank()) {
-            this.telefono = telefono;
-        } else {
-            System.out.println("Error: el teléfono no puede estar vacío.");
+        if (telefono == null || telefono.isBlank()) {
+            throw new IllegalArgumentException("El teléfono no puede estar vacío.");
         }
+        this.telefono = telefono;
     }
 
     @Override
@@ -94,5 +88,4 @@ public class Cliente {
                 TELEFONO:           %s
                 """.formatted(id, nombre, identificacion, correo, telefono));
     }
-
 }

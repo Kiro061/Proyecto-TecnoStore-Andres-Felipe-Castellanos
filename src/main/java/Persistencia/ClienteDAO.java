@@ -73,8 +73,9 @@ public class ClienteDAO {
     public List<Cliente> listar() {
         String sql = "SELECT * FROM clientes";
         List<Cliente> clientes = new ArrayList<>();
-        try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {
-            ResultSet rs = ps.executeQuery();
+
+        try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 Cliente cliente = new Cliente(
                         rs.getInt("id"),
@@ -95,19 +96,20 @@ public class ClienteDAO {
     public Cliente buscarPorId(int id) {
         String sql = "SELECT * FROM clientes WHERE id = ?";
 
-        try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql);) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Cliente cliente = new Cliente(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("identificacion"),
-                        rs.getString("correo"),
-                        rs.getString("telefono")
-                );
+        try (Connection con = conexion.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-                return cliente;
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Cliente(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("identificacion"),
+                            rs.getString("correo"),
+                            rs.getString("telefono")
+                    );
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

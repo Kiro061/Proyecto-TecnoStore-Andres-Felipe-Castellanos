@@ -13,21 +13,17 @@ public class Venta {
     private List<DetalleVenta> detalles;
 
     public Venta(Cliente cliente) {
-        this.cliente = cliente;
+        setCliente(cliente);
         this.fecha = LocalDate.now();
         this.detalles = new ArrayList<>();
     }
 
     public Venta(int id, Cliente cliente, LocalDate fecha, double total) {
-        this.id = id;
-        this.cliente = cliente;
-        this.fecha = fecha;
-        this.total = total;
+        setId(id);
+        setCliente(cliente);
+        setFecha(fecha);
+        setTotal(total);
         this.detalles = new ArrayList<>();
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
     }
 
     public void agregarDetalle(DetalleVenta detalle) {
@@ -35,13 +31,10 @@ public class Venta {
     }
 
     public double calcularTotal() {
-
         total = 0;
-
         for (DetalleVenta detalle : detalles) {
             total += detalle.getSubtotal();
         }
-
         return total;
     }
 
@@ -58,6 +51,9 @@ public class Venta {
     }
 
     public void setId(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("El ID debe ser mayor que cero.");
+        }
         this.id = id;
     }
 
@@ -66,6 +62,9 @@ public class Venta {
     }
 
     public void setCliente(Cliente cliente) {
+        if (cliente == null) {
+            throw new IllegalArgumentException("La venta debe tener un cliente asociado.");
+        }
         this.cliente = cliente;
     }
 
@@ -74,11 +73,21 @@ public class Venta {
     }
 
     public void setFecha(LocalDate fecha) {
+        if (fecha == null) {
+            throw new IllegalArgumentException("La fecha no puede ser nula.");
+        }
         this.fecha = fecha;
     }
 
     public double getTotal() {
         return total;
+    }
+
+    public void setTotal(double total) {
+        if (total < 0) {
+            throw new IllegalArgumentException("El total no puede ser negativo.");
+        }
+        this.total = total;
     }
 
     @Override

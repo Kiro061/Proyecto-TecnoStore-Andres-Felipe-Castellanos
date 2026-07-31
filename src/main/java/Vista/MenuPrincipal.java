@@ -1,20 +1,15 @@
 package Vista;
 
-import Utilidades.ArchivoUtils;
-import Utilidades.ReporteUtils;
-import java.util.Scanner;
+import Utilidades.Validador;
 
 public class MenuPrincipal {
-
-    private final Scanner sc = new Scanner(System.in);
 
     private final VistaCelular vistaCelular = new VistaCelular();
     private final VistaCliente vistaCliente = new VistaCliente();
     private final VistaVenta vistaVenta = new VistaVenta();
     private final VistaReportes vistaReportes = new VistaReportes();
 
-    private final ReporteUtils reporte = new ReporteUtils();
-    private final ArchivoUtils archivo = new ArchivoUtils();
+    private final Validador validador = new Validador();
 
     public void iniciar() {
 
@@ -22,7 +17,7 @@ public class MenuPrincipal {
 
         do {
 
-            System.out.println("""
+            opcion = validador.validarEnteroRango("""
                     
                     =================================
                             TECNOSTORE
@@ -31,12 +26,10 @@ public class MenuPrincipal {
                     2. Gestión de Clientes
                     3. Gestión de Ventas
                     4. Reportes
-                    5. Generar reporte de ventas (.txt)
                     0. Salir
-                    """);
-
-            System.out.print("Seleccione una opción: ");
-            opcion = sc.nextInt();
+                    
+                    Seleccione una opción:
+                    """, 0, 4);
 
             switch (opcion) {
 
@@ -52,17 +45,16 @@ public class MenuPrincipal {
                 case 4 ->
                     vistaReportes.mostrarMenu();
 
-                case 5 ->
-                    archivo.generarReporteVentas();
-
                 case 0 ->
                     System.out.println("Gracias por usar TecnoStore.");
 
                 default ->
                     System.out.println("Opción no válida.");
+
             }
 
         } while (opcion != 0);
 
     }
+
 }

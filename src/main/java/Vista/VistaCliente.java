@@ -2,13 +2,14 @@ package Vista;
 
 import Controlador.GestorClientes;
 import Modelo.Cliente;
+import Utilidades.Validador;
+
 import java.util.List;
-import java.util.Scanner;
 
 public class VistaCliente {
 
-    private final Scanner sc = new Scanner(System.in);
     private final GestorClientes gestor = new GestorClientes();
+    private final Validador validador = new Validador();
 
     public void mostrarMenu() {
 
@@ -16,7 +17,7 @@ public class VistaCliente {
 
         do {
 
-            System.out.println("""
+            opcion = validador.validarEnteroRango("""
                     
                     ===== GESTIÓN DE CLIENTES =====
                     
@@ -26,11 +27,9 @@ public class VistaCliente {
                     4. Eliminar cliente
                     5. Listar clientes
                     0. Volver
-                    """);
-
-            System.out.print("Seleccione una opción: ");
-            opcion = sc.nextInt();
-            sc.nextLine();
+                    
+                    Seleccione una opción:
+                    """, 0, 5);
 
             switch (opcion) {
 
@@ -52,8 +51,6 @@ public class VistaCliente {
                 case 0 ->
                     System.out.println("Volviendo al menú principal...");
 
-                default ->
-                    System.out.println("Opción no válida.");
             }
 
         } while (opcion != 0);
@@ -64,38 +61,28 @@ public class VistaCliente {
 
         System.out.println("\n===== REGISTRAR CLIENTE =====");
 
-        System.out.print("Nombre: ");
-        String nombre = sc.nextLine();
+        String nombre = validador.validarTexto("Nombre:");
+        String identificacion = validador.validarTexto("Identificación:");
+        String correo = validador.validarTexto("Correo:");
+        String telefono = validador.validarTexto("Teléfono:");
 
-        System.out.print("Identificación: ");
-        String identificacion = sc.nextLine();
+        try {
+            Cliente cliente = new Cliente(nombre, identificacion, correo, telefono);
 
-        System.out.print("Correo: ");
-        String correo = sc.nextLine();
-
-        System.out.print("Teléfono: ");
-        String telefono = sc.nextLine();
-
-        Cliente cliente = new Cliente(
-                nombre,
-                identificacion,
-                correo,
-                telefono
-        );
-
-        if (gestor.registrarCliente(cliente)) {
-            System.out.println("Cliente registrado correctamente.");
-        } else {
-            System.out.println("No fue posible registrar el cliente.");
+            if (gestor.registrarCliente(cliente)) {
+                System.out.println("Cliente registrado correctamente.");
+            } else {
+                System.out.println("No fue posible registrar el cliente.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
     }
 
     private void buscarCliente() {
 
-        System.out.print("Ingrese el ID del cliente: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+        int id = validador.validarEntero("Ingrese el ID del cliente:");
 
         Cliente cliente = gestor.buscarCliente(id);
 
@@ -109,9 +96,7 @@ public class VistaCliente {
 
     private void actualizarCliente() {
 
-        System.out.print("Ingrese el ID del cliente: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+        int id = validador.validarEntero("Ingrese el ID del cliente:");
 
         Cliente cliente = gestor.buscarCliente(id);
 
@@ -120,39 +105,28 @@ public class VistaCliente {
             return;
         }
 
-        System.out.print("Nombre: ");
-        String nombre = sc.nextLine();
+        String nombre = validador.validarTexto("Nombre:");
+        String identificacion = validador.validarTexto("Identificación:");
+        String correo = validador.validarTexto("Correo:");
+        String telefono = validador.validarTexto("Teléfono:");
 
-        System.out.print("Identificación: ");
-        String identificacion = sc.nextLine();
+        try {
+            Cliente actualizado = new Cliente(id, nombre, identificacion, correo, telefono);
 
-        System.out.print("Correo: ");
-        String correo = sc.nextLine();
-
-        System.out.print("Teléfono: ");
-        String telefono = sc.nextLine();
-
-        Cliente actualizado = new Cliente(
-                id,
-                nombre,
-                identificacion,
-                correo,
-                telefono
-        );
-
-        if (gestor.actualizarCliente(actualizado)) {
-            System.out.println("Cliente actualizado correctamente.");
-        } else {
-            System.out.println("No fue posible actualizar el cliente.");
+            if (gestor.actualizarCliente(actualizado)) {
+                System.out.println("Cliente actualizado correctamente.");
+            } else {
+                System.out.println("No fue posible actualizar el cliente.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
     }
 
     private void eliminarCliente() {
 
-        System.out.print("Ingrese el ID del cliente: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+        int id = validador.validarEntero("Ingrese el ID del cliente:");
 
         if (gestor.eliminarCliente(id)) {
             System.out.println("Cliente eliminado correctamente.");

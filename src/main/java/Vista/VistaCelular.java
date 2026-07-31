@@ -1,17 +1,18 @@
 package Vista;
 
 import Controlador.GestorCelulares;
+
 import Modelo.CategoriaGama;
 import Modelo.Celular;
 import Patrones.FactoryCelular;
+import Utilidades.Validador;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class VistaCelular {
 
-    private final Scanner sc = new Scanner(System.in);
     private final GestorCelulares gestor = new GestorCelulares();
+    private final Validador validador = new Validador();
 
     public void mostrarMenu() {
 
@@ -31,9 +32,11 @@ public class VistaCelular {
                     0. Volver
                     """);
 
-            System.out.print("Seleccione una opción: ");
-            opcion = sc.nextInt();
-            sc.nextLine();
+            opcion = validador.validarEnteroRango(
+                    "Seleccione una opción:",
+                    0,
+                    5
+            );
 
             switch (opcion) {
 
@@ -55,8 +58,6 @@ public class VistaCelular {
                 case 0 ->
                     System.out.println("Volviendo al menú principal...");
 
-                default ->
-                    System.out.println("Opción no válida.");
             }
 
         } while (opcion != 0);
@@ -67,56 +68,41 @@ public class VistaCelular {
 
         System.out.println("\n=== REGISTRAR CELULAR ===");
 
-        System.out.print("Marca: ");
-        String marca = sc.nextLine();
-
-        System.out.print("Modelo: ");
-        String modelo = sc.nextLine();
-
-        System.out.print("Precio: ");
-        double precio = sc.nextDouble();
-
-        System.out.print("Stock: ");
-        int stock = sc.nextInt();
-        sc.nextLine();
-
-        System.out.print("Sistema Operativo: ");
-        String sistema = sc.nextLine();
+        String marca = validador.validarTexto("Marca:");
+        String modelo = validador.validarTexto("Modelo:");
+        double precio = validador.validarDecimal("Precio:");
+        int stock = validador.validarEntero("Stock:");
+        String sistema = validador.validarTexto("Sistema Operativo:");
 
         System.out.println("""
-                Gama:
-                1. Alta
-                2. Media
-                3. Baja
-                """);
+            Gama:
+            1. Alta
+            2. Media
+            3. Baja
+            """);
 
-        int opcion = sc.nextInt();
-
+        int opcion = validador.validarEnteroRango("Seleccione la gama:", 1, 3);
         CategoriaGama gama = CategoriaGama.fromId(opcion);
 
-        Celular celular = FactoryCelular.crearCelular(
-                marca,
-                modelo,
-                precio,
-                stock,
-                sistema,
-                gama
-        );
+        try {
+            Celular celular = FactoryCelular.crearCelular(marca, modelo, precio, stock, sistema, gama);
 
-        if (gestor.registrarCelular(celular)) {
-            System.out.println("Celular registrado correctamente.");
-        } else {
-            System.out.println("No fue posible registrar el celular.");
+            if (gestor.registrarCelular(celular)) {
+                System.out.println("Celular registrado correctamente.");
+            } else {
+                System.out.println("No fue posible registrar el celular.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
     }
 
     private void buscarCelular() {
 
-        System.out.print("ID del celular: ");
-        int id = sc.nextInt();
+        int id = validador.validarEntero("ID del celular:");
 
-        Celular celular = gestor.buscarCelular(id);
+        Celular celular = gestor.buscarPorId(id);
 
         if (celular != null) {
             System.out.println(celular);
@@ -128,66 +114,48 @@ public class VistaCelular {
 
     private void actualizarCelular() {
 
-        System.out.print("ID del celular: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+        int id = validador.validarEntero("ID del celular:");
 
-        Celular celular = gestor.buscarCelular(id);
+        Celular celular = gestor.buscarPorId(id);
 
         if (celular == null) {
             System.out.println("Celular no encontrado.");
             return;
         }
 
-        System.out.print("Marca: ");
-        String marca = sc.nextLine();
-
-        System.out.print("Modelo: ");
-        String modelo = sc.nextLine();
-
-        System.out.print("Precio: ");
-        double precio = sc.nextDouble();
-
-        System.out.print("Stock: ");
-        int stock = sc.nextInt();
-        sc.nextLine();
-
-        System.out.print("Sistema Operativo: ");
-        String sistema = sc.nextLine();
+        String marca = validador.validarTexto("Marca:");
+        String modelo = validador.validarTexto("Modelo:");
+        double precio = validador.validarDecimal("Precio:");
+        int stock = validador.validarEntero("Stock:");
+        String sistema = validador.validarTexto("Sistema Operativo:");
 
         System.out.println("""
-                Gama:
-                1. Alta
-                2. Media
-                3. Baja
-                """);
+            Gama:
+            1. Alta
+            2. Media
+            3. Baja
+            """);
 
-        int opcion = sc.nextInt();
-
+        int opcion = validador.validarEnteroRango("Seleccione la gama:", 1, 3);
         CategoriaGama gama = CategoriaGama.fromId(opcion);
 
-        Celular actualizado = FactoryCelular.crearCelular(
-                id,
-                marca,
-                modelo,
-                precio,
-                stock,
-                sistema,
-                gama
-        );
+        try {
+            Celular actualizado = FactoryCelular.crearCelular(id, marca, modelo, precio, stock, sistema, gama);
 
-        if (gestor.actualizarCelular(actualizado)) {
-            System.out.println("Celular actualizado correctamente.");
-        } else {
-            System.out.println("No fue posible actualizar.");
+            if (gestor.actualizarCelular(actualizado)) {
+                System.out.println("Celular actualizado correctamente.");
+            } else {
+                System.out.println("No fue posible actualizar.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
     }
 
     private void eliminarCelular() {
 
-        System.out.print("ID del celular: ");
-        int id = sc.nextInt();
+        int id = validador.validarEntero("ID del celular:");
 
         if (gestor.eliminarCelular(id)) {
             System.out.println("Celular eliminado.");
@@ -202,10 +170,8 @@ public class VistaCelular {
         List<Celular> celulares = gestor.listarCelulares();
 
         if (celulares.isEmpty()) {
-
             System.out.println("No hay celulares registrados.");
             return;
-
         }
 
         celulares.forEach(System.out::println);

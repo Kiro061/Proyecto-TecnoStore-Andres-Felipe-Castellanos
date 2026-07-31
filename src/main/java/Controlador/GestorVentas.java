@@ -12,7 +12,6 @@ public class GestorVentas {
     private final VentaDAO ventaDAO;
     private final ClienteDAO clienteDAO;
     private final CelularDAO celularDAO;
-
     private static final double IVA = 0.19;
 
     public GestorVentas() {
@@ -24,10 +23,6 @@ public class GestorVentas {
     public boolean registrarVenta(Venta venta) {
 
         if (venta == null) {
-            return false;
-        }
-
-        if (venta.getCliente() == null) {
             return false;
         }
 
@@ -53,10 +48,6 @@ public class GestorVentas {
                 return false;
             }
 
-            if (detalle.getCantidad() <= 0) {
-                return false;
-            }
-
             if (celular.getStock() < detalle.getCantidad()) {
                 return false;
             }
@@ -65,7 +56,6 @@ public class GestorVentas {
         }
 
         double total = subtotal + (subtotal * IVA);
-
         venta.setTotal(total);
 
         return ventaDAO.registrar(venta);

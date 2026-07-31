@@ -28,11 +28,10 @@ public class DetalleVenta {
     }
 
     public void setId(int id) {
-        if (id > 0) {
-            this.id = id;
-        } else {
-            System.out.println("Error: el ID debe ser mayor que cero.");
+        if (id <= 0) {
+            throw new IllegalArgumentException("El ID debe ser mayor que cero.");
         }
+        this.id = id;
     }
 
     public Venta getVenta() {
@@ -40,11 +39,10 @@ public class DetalleVenta {
     }
 
     public void setVenta(Venta venta) {
-        if (venta != null) {
-            this.venta = venta;
-        } else {
-            System.out.println("Error: la venta no puede ser nula.");
+        if (venta == null) {
+            throw new IllegalArgumentException("La venta no puede ser nula.");
         }
+        this.venta = venta;
     }
 
     public Celular getCelular() {
@@ -52,11 +50,10 @@ public class DetalleVenta {
     }
 
     public void setCelular(Celular celular) {
-        if (celular != null) {
-            this.celular = celular;
-        } else {
-            System.out.println("Error: el celular no puede ser nulo.");
+        if (celular == null) {
+            throw new IllegalArgumentException("El celular no puede ser nulo.");
         }
+        this.celular = celular;
     }
 
     public int getCantidad() {
@@ -64,11 +61,10 @@ public class DetalleVenta {
     }
 
     public void setCantidad(int cantidad) {
-        if (cantidad > 0) {
-            this.cantidad = cantidad;
-        } else {
-            System.out.println("Error: la cantidad debe ser mayor que cero.");
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
         }
+        this.cantidad = cantidad;
     }
 
     public double getSubtotal() {
@@ -76,11 +72,10 @@ public class DetalleVenta {
     }
 
     public void setSubtotal(double subtotal) {
-        if (subtotal >= 0) {
-            this.subtotal = subtotal;
-        } else {
-            System.out.println("Error: el subtotal no puede ser negativo.");
+        if (subtotal < 0) {
+            throw new IllegalArgumentException("El subtotal no puede ser negativo.");
         }
+        this.subtotal = subtotal;
     }
 
     @Override
@@ -93,5 +88,4 @@ public class DetalleVenta {
                 SUBTOTAL:   %.2f
                 """.formatted(id, venta.getId(), celular.getId(), cantidad, subtotal));
     }
-
 }

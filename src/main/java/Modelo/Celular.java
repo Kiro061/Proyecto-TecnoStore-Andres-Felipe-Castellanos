@@ -10,8 +10,7 @@ public class Celular {
     private String sistemaOperativo;
     private CategoriaGama gama;
 
-    public Celular(String marca, String modelo, double precio,int stock, String sistemaOperativo, CategoriaGama gama) {
-
+    public Celular(String marca, String modelo, double precio, int stock, String sistemaOperativo, CategoriaGama gama) {
         setMarca(marca);
         setModelo(modelo);
         setPrecio(precio);
@@ -35,11 +34,10 @@ public class Celular {
     }
 
     public void setId(int id) {
-        if (id > 0) {
-            this.id = id;
-        } else {
-            System.out.println("Error: el ID debe ser mayor que cero.");
+        if (id <= 0) {
+            throw new IllegalArgumentException("El ID debe ser mayor que cero.");
         }
+        this.id = id;
     }
 
     public String getMarca() {
@@ -47,11 +45,10 @@ public class Celular {
     }
 
     public void setMarca(String marca) {
-        if (marca != null && !marca.isBlank()) {
-            this.marca = marca;
-        } else {
-            System.out.println("Error: la marca no puede estar vacía.");
+        if (marca == null || marca.isBlank()) {
+            throw new IllegalArgumentException("La marca no puede estar vacía.");
         }
+        this.marca = marca;
     }
 
     public String getModelo() {
@@ -59,11 +56,10 @@ public class Celular {
     }
 
     public void setModelo(String modelo) {
-        if (modelo != null && !modelo.isBlank()) {
-            this.modelo = modelo;
-        } else {
-            System.out.println("Error: el modelo no puede estar vacío.");
+        if (modelo == null || modelo.isBlank()) {
+            throw new IllegalArgumentException("El modelo no puede estar vacío.");
         }
+        this.modelo = modelo;
     }
 
     public double getPrecio() {
@@ -71,11 +67,10 @@ public class Celular {
     }
 
     public void setPrecio(double precio) {
-        if (precio > 0) {
-            this.precio = precio;
-        } else {
-            System.out.println("Error: el precio debe ser mayor que cero.");
+        if (precio <= 0) {
+            throw new IllegalArgumentException("El precio debe ser mayor que cero.");
         }
+        this.precio = precio;
     }
 
     public int getStock() {
@@ -83,11 +78,10 @@ public class Celular {
     }
 
     public void setStock(int stock) {
-        if (stock >= 0) {
-            this.stock = stock;
-        } else {
-            System.out.println("Error: el stock no puede ser negativo.");
+        if (stock < 0) {
+            throw new IllegalArgumentException("El stock no puede ser negativo.");
         }
+        this.stock = stock;
     }
 
     public String getSistemaOperativo() {
@@ -95,11 +89,10 @@ public class Celular {
     }
 
     public void setSistemaOperativo(String sistemaOperativo) {
-        if (sistemaOperativo != null && !sistemaOperativo.isBlank()) {
-            this.sistemaOperativo = sistemaOperativo;
-        } else {
-            System.out.println("Error: el sistema operativo no puede estar vacío.");
+        if (sistemaOperativo == null || sistemaOperativo.isBlank()) {
+            throw new IllegalArgumentException("El sistema operativo no puede estar vacío.");
         }
+        this.sistemaOperativo = sistemaOperativo;
     }
 
     public CategoriaGama getGama() {
@@ -107,11 +100,10 @@ public class Celular {
     }
 
     public void setGama(CategoriaGama gama) {
-        if (gama != null) {
-            this.gama = gama;
-        } else {
-            System.out.println("Error: debe seleccionar una gama.");
+        if (gama == null) {
+            throw new IllegalArgumentException("Debe seleccionar una gama.");
         }
+        this.gama = gama;
     }
 
     @Override
@@ -126,5 +118,4 @@ public class Celular {
                 STOCK:              %d
                 """.formatted(id, marca, modelo, sistemaOperativo, gama, precio, stock));
     }
-
 }

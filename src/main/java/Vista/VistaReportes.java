@@ -2,14 +2,13 @@ package Vista;
 
 import Utilidades.ArchivoUtils;
 import Utilidades.ReporteUtils;
-import java.util.Scanner;
+import Utilidades.Validador;
 
 public class VistaReportes {
 
-    private final Scanner sc = new Scanner(System.in);
-
     private final ReporteUtils reporte = new ReporteUtils();
     private final ArchivoUtils archivo = new ArchivoUtils();
+    private final Validador validador = new Validador();
 
     public void mostrarMenu() {
 
@@ -17,7 +16,7 @@ public class VistaReportes {
 
         do {
 
-            System.out.println("""
+            opcion = validador.validarEnteroRango("""
                     
                     ===== REPORTES =====
                     
@@ -26,10 +25,9 @@ public class VistaReportes {
                     3. Ventas totales por mes
                     4. Generar reporte de ventas (.txt)
                     0. Volver
-                    """);
-
-            System.out.print("Seleccione una opción: ");
-            opcion = sc.nextInt();
+                    
+                    Seleccione una opción:
+                    """, 0, 4);
 
             switch (opcion) {
 
@@ -48,8 +46,6 @@ public class VistaReportes {
                 case 0 ->
                     System.out.println("Volviendo al menú principal...");
 
-                default ->
-                    System.out.println("Opción no válida.");
             }
 
         } while (opcion != 0);

@@ -5,18 +5,16 @@ import Modelo.Celular;
 import Modelo.Cliente;
 import Modelo.DetalleVenta;
 import Modelo.Venta;
-import Persistencia.CelularDAO;
-import Persistencia.ClienteDAO;
-
-import java.util.Scanner;
+import Controlador.GestorCelulares;
+import Controlador.GestorClientes;
+import Utilidades.Validador;
 
 public class VistaVenta {
 
-    private final Scanner sc = new Scanner(System.in);
-
     private final GestorVentas gestor = new GestorVentas();
-    private final ClienteDAO clienteDAO = new ClienteDAO();
-    private final CelularDAO celularDAO = new CelularDAO();
+    private final GestorClientes gestorClientes = new GestorClientes();
+    private final GestorCelulares gestorCelulares = new GestorCelulares();
+    private final Validador validador = new Validador();
 
     public void mostrarMenu() {
 
@@ -24,17 +22,15 @@ public class VistaVenta {
 
         do {
 
-            System.out.println("""
+            opcion = validador.validarEnteroRango("""
                     
                     ===== GESTIÓN DE VENTAS =====
                     
                     1. Registrar venta
                     0. Volver
-                    """);
-
-            System.out.print("Seleccione una opción: ");
-            opcion = sc.nextInt();
-            sc.nextLine();
+                    
+                    Seleccione una opción:
+                    """, 0, 1);
 
             switch (opcion) {
 
@@ -44,8 +40,6 @@ public class VistaVenta {
                 case 0 ->
                     System.out.println("Volviendo al menú principal...");
 
-                default ->
-                    System.out.println("Opción no válida.");
             }
 
         } while (opcion != 0);
@@ -56,71 +50,68 @@ public class VistaVenta {
 
         System.out.println("\n===== REGISTRAR VENTA =====");
 
-        System.out.print("Identificación del cliente: ");
-        String identificacion = sc.nextLine();
+        String identificacion = validador.validarTexto("Identificación del cliente:");
 
-        Cliente cliente = clienteDAO.buscarPorIdentificacion(identificacion);
+        Cliente cliente = gestorClientes.buscarPorIdentificacion(identificacion);
 
         if (cliente == null) {
             System.out.println("Cliente no encontrado.");
             return;
         }
 
-        Venta venta = new Venta(cliente);
+        Venta venta;
+
+        try {
+            venta = new Venta(cliente);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+            return;
+        }
 
         int continuar;
-        
-        do {
-            System.out.println("\n===== CELULARES DISPONIBLES =====");
-            celularDAO.listarCelulares().forEach(System.out::println);
-            
-            System.out.print("ID del celular: ");
-            int idCelular = sc.nextInt();
 
-            Celular celular = celularDAO.buscarPorId(idCelular);
+        do {
+
+            System.out.println("\n===== CELULARES DISPONIBLES =====");
+            gestorCelulares.listarCelulares().forEach(System.out::println);
+
+            int idCelular = validador.validarEntero("ID del celular:");
+            Celular celular = gestorCelulares.buscarPorId(idCelular);
 
             if (celular == null) {
                 System.out.println("Celular no encontrado.");
                 return;
             }
 
-            System.out.print("Cantidad: ");
-            int cantidad = sc.nextInt();
-
+            int cantidad = validador.validarEntero("Cantidad:");
             double subtotal = celular.getPrecio() * cantidad;
 
-            DetalleVenta detalle = new DetalleVenta(
-                    venta,
-                    celular,
-                    cantidad,
-                    subtotal
-            );
+            try {
+                DetalleVenta detalle = new DetalleVenta(venta, celular, cantidad, subtotal);
+                venta.agregarDetalle(detalle);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage());
+                return;
+            }
 
-            venta.agregarDetalle(detalle);
-
-            System.out.println("""
-                    
-                    ¿Desea agregar otro celular?
-                    
-                    1. Sí
-                    2. No
-                    """);
-
-            continuar = sc.nextInt();
+            continuar = validador.validarEnteroRango("""
+            
+            ¿Desea agregar otro celular?
+            
+            1. Sí
+            2. No
+            
+            Seleccione una opción:
+            """, 1, 2);
 
         } while (continuar == 1);
 
         if (gestor.registrarVenta(venta)) {
-
             System.out.println("Venta registrada correctamente.");
-            System.out.println("Total con IVA: $" + venta.getTotal());
-
+            System.out.printf("Total con IVA: $%,.2f%n", venta.getTotal());
         } else {
-
             System.out.println("No fue posible registrar la venta.");
-
         }
 
     }
-
 }

@@ -1,0 +1,7 @@
+===== REPORTE DE VENTAS =====
+
+Venta #1
+Cliente: Andres Castellannos
+Fecha: 2026-07-30
+Total: $1.785E7
+--------------------------------

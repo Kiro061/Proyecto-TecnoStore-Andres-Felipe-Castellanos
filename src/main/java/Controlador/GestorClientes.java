@@ -18,18 +18,6 @@ public class GestorClientes {
             return false;
         }
 
-        if (cliente.getNombre() == null || cliente.getNombre().trim().isEmpty()) {
-            return false;
-        }
-
-        if (cliente.getCorreo() == null || cliente.getCorreo().trim().isEmpty()) {
-            return false;
-        }
-
-        if (cliente.getTelefono() == null || cliente.getTelefono().trim().isEmpty()) {
-            return false;
-        }
-
         return clienteDAO.registrar(cliente);
     }
 
@@ -39,31 +27,23 @@ public class GestorClientes {
             return false;
         }
 
-        if (cliente.getNombre() == null || cliente.getNombre().trim().isEmpty()) {
-            return false;
-        }
-
-        if (cliente.getCorreo() == null || cliente.getCorreo().trim().isEmpty()) {
-            return false;
-        }
-
-        if (cliente.getTelefono() == null || cliente.getTelefono().trim().isEmpty()) {
-            return false;
-        }
-
         return clienteDAO.actualizar(cliente);
     }
 
-    public boolean eliminarCliente(int identificacion) {
-        return clienteDAO.eliminar(identificacion);
+    public boolean eliminarCliente(int id) {
+        return clienteDAO.eliminar(id);
     }
 
-    public Cliente buscarCliente(int identificacion) {
-        return clienteDAO.buscarPorId(identificacion);
+    public Cliente buscarCliente(int id) {
+        return clienteDAO.buscarPorId(id);
     }
 
     public List<Cliente> listarClientes() {
         return clienteDAO.listar();
+    }
+
+    public Cliente buscarPorIdentificacion(String identificacion) {
+        return clienteDAO.buscarPorIdentificacion(identificacion);
     }
 
 }
